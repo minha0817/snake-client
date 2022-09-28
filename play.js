@@ -3,5 +3,23 @@ const { connect } = require("./client");
 console.log("Connecting.....");
 connect();
 
-//conn object represents the connection that we have with the server.
-//conn object has full of useful methods and properties to interact with server.
+const setupInput = function () {
+  const stdin = process.stdin;
+  stdin.setRawMode(true);
+  stdin.setEncoding("utf8");
+  stdin.resume();
+
+  const handleUserInput = function (data) {
+    if (data === "\u0003") {
+      process.exit();
+    }
+
+    process.stdout.write(data);
+  };
+
+  stdin.on("data", handleUserInput);
+
+  return stdin;
+};
+
+setupInput();
